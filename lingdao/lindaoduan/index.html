@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>首页</title>
+    <script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="../js/vue.min.js"></script>
+    <script type="text/javascript" src="../js/axios.min.js"></script>
+    <script type="text/javascript" src="../js/fetchData.js"></script>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/index.css">
+<body >
+<div class="head">
+    <div class="toux" onclick="fn()">
+        <img src="../imgs/toux.png" alt="">
+    </div>
+    <div class="title">
+        <h5 id="name"></h5>
+    </div>
+</div>
+<div class="list clearfix">
+    <ul>
+        <li>
+            <a href="infor.html">
+                <img src="../imgs/xxtj.png" alt="">
+                <p>信息统计</p>
+            </a>
+        </li>
+        <li>
+            <a href="xiaoxi.html">
+                <img src="../imgs/xx.png" alt="">
+                <p>消息通知</p>
+            </a>
+        </li>
+        <li>
+            <a href="task_list.html">
+                <img src="../imgs/rwjl.png" alt="">
+                <p>任务记录</p>
+            </a>
+        </li>
+        <li>
+            <a  onclick="jump()">
+                <img src="../imgs/baojing.png" alt="">
+                <p>平台报警</p>
+            </a>
+        </li>
+        <li>
+            <a href="zhuanjiaku.html">
+                <img src="../imgs/zjk.png" alt="">
+                <p>专家库</p>
+            </a>
+        </li>
+        <li>
+            <a href="tongxunlu.html">
+                <img src="../imgs/txl.png" alt="">
+                <p>部门通讯录</p>
+            </a>
+        </li>
+        <li>
+            <a href="falv.html">
+                <img src="../imgs/fggl.png" alt="">
+                <p>法规管理</p>
+            </a>
+        </li>
+        <li>
+            <a href="sousuo.html">
+                <img src="../imgs/ss.png" alt="">
+                <p>搜索</p>
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="foot clearfix">
+    <ul>
+        <li>
+            <a href="#">
+                <img src="../imgs/house_1.png" alt="">
+                <p class="first">首页</p>
+            </a>
+        </li>
+        <li>
+            <a href="renwu.html">
+                <img src="../imgs/renwu.png" alt="">
+                <p>任务</p>
+            </a>
+        </li>
+        <li>
+            <a href="yic.html">
+                <img src="../imgs/yic.png" alt="">
+                <p>异常</p>
+            </a>
+        </li>
+    </ul>
+</div>
+</body>
+
+<script>
+  function fn() {
+    window.location.href = "user.html";
+  }
+function jump() {
+    var result = {
+      client_id:'vQzpPTDRs0fi7pNGmnv4',
+      client_secret:'xVfxCsvtp2HKUGcxEQrh',
+      grant_type:'client_credentials',
+      scope:'read write'
+    }
+  $.ajax({
+    url: 'http://runyapp.s1.natapp.cc/authz/oauth/token',
+    type:'POST',
+    dataType: 'json',
+    data:result,
+    success : function(data) {
+        window.location.href="zhexian.html?access_token="+data.access_token+'&token_type='+data.token_type;
+    }
+  });
+}
+  var myvue = new Vue({
+    el: '#app',
+    data() {
+      return {
+        realname: '',
+        userInfo: {},
+      }
+    },
+    methods: {
+      getUserInfo() { // 获取用户信息
+        let data = {
+          data: {},
+          url: '/app/user/info'
+        }
+        fetchData(data).then(res => {
+          console.log(res);
+          if (res.data.code === 0) {
+            this.userInfo = res.data.data;
+            sessionStorage.setItem('realname', this.userInfo.realname);
+            sessionStorage.setItem('mobile', this.userInfo.mobile);
+            sessionStorage.setItem('regionName', this.userInfo.regionName);
+            $("#name").text(this.userInfo.realname)
+          } else {
+
+          }
+        });
+      },
+      init() {
+        this.getUserInfo();
+      }
+    },
+    created() {
+      this.init();
+    }
+  });
+</script>
+</html>

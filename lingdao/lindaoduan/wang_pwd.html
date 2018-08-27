@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>忘记密码</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/wang_pwd.css">
+<style>
+
+</style>
+<body>
+<div>
+    <img src="../imgs/phone.png" alt="">
+    <input class="put" type="text" placeholder="请输入手机号">
+    <img src="../imgs/dunp.png" alt="">
+    <input class="put" type="text" placeholder="请输入验证码">
+    <a href="">获取验证</a>
+    <img src="../imgs/suo.png" alt="">
+    <input class="put" type="password" placeholder="请输入新密码">
+</div>
+<button type="submit" id="btn">重置密码</button>
+</body>
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script src="../js/layer_mobile/layer.js"></script>
+<script>
+    $('#btn').click(function () {
+        layer.open({
+            content: '重置密码成功！'
+            ,time: 3
+            ,end: function () {
+                location.href='login.html';
+            }
+        });
+    })
+</script>
+</html>

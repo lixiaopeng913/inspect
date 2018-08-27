@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+<div id="container" style="height: 100%"></div>
+<script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript"
+        src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+<script type="text/javascript">
+  function getQueryString (name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+    if (r != null) return decodeURIComponent(r[2]); return null; //返回参数值
+  }
+  var dom = document.getElementById("container");
+  var myChart = echarts.init(dom);
+  var app = {};
+
+  option = null;
+  option = {
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [{
+      data: [820, 932, 901, 934, 1290, 1330, 1320],
+      type: 'line'
+    }]
+  };
+  if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+  }
+  $(function () {
+    var result = {
+      divisionId:'e2959ba4152c431c94c4ff6d653bdf60',
+      parentIds:'0,1,2,3,9be8d1f66acf42afb31a30ea0e52a5d7,2f9cdb6ec1ef43de9b910c2395d3dc48'
+    }
+    $.ajax({
+      url: 'http://runyapp.s1.natapp.cc/api/ex/division/alarmStatistics',
+      headers: {
+        Accept: "application/json; charset=utf-8",
+        Authorization:getQueryString('token_type') +''+ getQueryString('access_token')
+      },
+      type: 'POST',
+      dataType: 'json',
+      data: result,
+      success: function (data) {
+        //window.location.href = "zhexian.html";
+      }
+    });
+  })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+div.qiye,div.yyzz{
+    background-color: #fff;
+    padding: 15px 3%;
+    border-bottom: 10px solid #eee;
+}
+div.qiye p{
+    color: #56585b;
+}
+div.yyzz{
+    border: 0;
+}
+div.yyzz p:first-child{
+    border-bottom: 1px solid #eee;
+    color: #202326;
+    padding-bottom: 15px;
+}
+div.yyzz div.box{
+    border: 1px dashed #80bdff;
+    width: 80%;
+    margin: 20px 10%;
+}
+div.yyzz div.box img{
+    width: 100%;
+}
+div.yyzz p{
+    color:#56585b ;
+    margin: 0;
+}

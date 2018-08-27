@@ -1,0 +1,28 @@
+div.container-fluid{
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+    padding: 15px 3%;
+}
+div.container-fluid p{
+    margin: 0;
+}
+div.container-fluid p span{
+    color: orange;
+}
+div.container-fluid p img{
+    float: right;
+    width: 3%;
+}
+div.container{
+    padding: 0;
+
+    margin-top: 10px;
+}
+div.container table.table-bordered{
+    width: 160%;
+    background-color: #fff;
+}
+div.container table.table-bordered tr td{
+    text-align: center;
+    padding: 15px 30px;
+}

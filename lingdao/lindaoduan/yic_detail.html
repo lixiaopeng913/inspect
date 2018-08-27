@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>检查情况-异常</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/yic_detail.css">
+<body>
+<div id="app">
+    <div class="title">
+        <p>
+            识别码：{{params.qrCode}}
+            <span v-if='status==1||status==2' @click='linkHistory'>
+                历史检查
+                <img src="../imgs/task_img/right.png" alt="">
+            </span>
+        </p>
+    </div>
+    <div class="mhq clearfix">
+        <div class="box">
+            <img :src="params.materialUrl" alt="">
+        </div>
+        <div class="box_1">
+            <p>
+                {{params.materialName}}
+                <span @click='linkGuifan'>检查规范</span>
+            </p>
+            <p>位置：{{params.location}}</p>
+            <p>生产日期：{{params.producedDate|cutTime}}</p>
+            <p>过期日期：{{params.expireDate|cutTime}}</p>
+        </div>
+    </div>
+    <div class="jcjg">
+        <p>
+            检查时间：
+            <span>{{params.checkTime}}</span>
+        </p>
+        <p>
+            检查人：
+            <span>{{params.checkUserName}}</span>
+        </p>
+        <p>
+            检查结果：
+            <span class="yic">{{params.checkResult}}</span>
+        </p>
+        <p>
+            上报上级：
+            <span>{{params.chiefName}}</span>
+        </p>
+        <p>
+            检查描述：
+            <span>{{params.description}}</span>
+        </p>
+    </div>
+
+    <div class="yuanyin" v-if='status==0'>
+        <p>
+            异常原因
+        </p>
+        <p v-for='anomaly in params.anomalys'>
+            <span>异常</span>
+            {{anomaly.descr}}
+        </p>
+    </div>
+
+    <div class="xianc clearfix">
+        <p>现场照片</p>
+        <ul>
+            <li v-for='photo in xianchangPhoto'>
+                <img :src="photo" alt="">
+            </li>
+        </ul>
+    </div>
+
+    <div class="culi" v-if='status==1||status==2' style="background-color: #FFF;padding: 10px;">
+        <p>异常处理描述</p>
+        <ul>
+            <li v-for='anomaly in params.anomalys'>
+                <p>
+                    {{anomaly.userName}}
+                    <span>{{anomaly.createTime}}</span>
+                </p>
+                <p>
+                    上报描述：{{anomaly.descr}}
+                </p>
+            </li>
+        </ul>
+    </div>
+
+</div>
+</body>
+
+<script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../js/vue.min.js"></script>
+<script type="text/javascript" src="../js/axios.min.js"></script>
+<script type="text/javascript" src="../js/fetchData.js"></script>
+<script>
+    var myvue = new Vue({
+        el: '#app',
+        data: {
+            nodata: false,
+            status: '',
+            params: {},
+            xianchangPhoto: []
+        },
+        filters: {
+            cutTime(value){
+                return value.match(/^.+\s/)[0];
+            }
+        },
+        created(){ 
+            var status = window.location.href.match(/status=\d+/)[0].replace('status=','');
+            console.log(status);
+            this.status = status; 
+            var params = decodeURIComponent(window.location.href).match(/params=.+/)[0].replace('params=','');
+            console.log( params) ;
+            this.params = JSON.parse(params); 
+            this.xianchangPhoto = params.urls?params.urls.split(','):[];
+        },
+        methods: {
+            linkGuifan(){
+                console.log(this.params.materialTypeId);
+                window.location.href="jcgf.html?materialTypeId="+this.params.materialTypeId;
+            },
+            linkChuli(){
+                window.location.href="01_yic_chuli.html?params="+JSON.stringify(this.params);
+            },
+            linkShangbao(){
+                sessionStorage.removeItem('chiefIds');
+                window.location.href="04_shangbao.html?materialTypeId="+this.params.materialTypeId;
+            },
+            linkHistory(){
+                var url = "jcjl.html?materialId="+ this.params.materialId;
+                window.location.href = url
+            }
+        }
+    });
+</script>
+</html>

@@ -1,0 +1,65 @@
+
+div.seach{
+    background-color: #fff;
+    padding: 15px 0;
+    text-align: left;
+    margin-bottom: 10px;
+}
+div input{
+    background-color: #eee;
+    border: 0;
+    outline: none;
+    /*float: left;*/
+    padding: 5px 0 5px 35px;
+    margin-left: 3%;
+    width: 80%;
+    font-size: 0.9em;
+    position: relative;
+
+}
+div img.fdj{
+    float: left;
+    position: absolute;
+    left: 4.5%;
+    top:20px;
+    background-color: #eee;
+    width:5%;
+    z-index: 100;
+}
+div span{
+    margin-left: 10px;
+}
+ul li{
+    background-color: #fff;
+    padding: 15px 3%;
+}
+ul li div{
+    float: left;
+}
+ul li div.box{
+    width: 40%;
+}
+ul li div.box img{
+    width: 100%;
+}
+ul li div.box_1{
+    padding-left: 15px;
+
+}
+ul li div.box_1 p{
+    color: #8c8e91;
+    font-size: 0.9em;
+}
+ul li div.box_1 p:first-child{
+    color: #0a0a0a;
+    font-size: 1em;
+}
+ul li div.box_1 p{
+    margin: 0;
+    padding-bottom: 9%;
+}
+
+ul li{
+    border-bottom: 1px solid #eee;
+}
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>登陆</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/login.css">
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<body>
+<div class="logo">
+    <img src="../imgs/logo.png" alt="">
+</div>
+<img class="yhm" src="../imgs/yhm.jpg" alt="">
+<input type="text"  placeholder="请输入用户名" id="username">
+<img class="pwd" src="../imgs/pwd.jpg" alt="">
+<input type="password"  placeholder="请输入密码" id="password">
+<a href="./wang_pwd.html">忘记密码?</a>
+<button type="submit" onclick="btn()">立即登陆</button>
+</body>
+<script>
+    function btn() {
+      var result = {
+        username:$('#username').val(),
+        password:$('#password').val()
+      }
+      $.ajax({
+        url: 'http://47.92.7.119:8080/app/user/login',
+        type:'POST',
+        dataType: 'json',
+        data:result,
+        success : function(data) {
+            if (data.code === 200) {
+              window.location.href="index.html";
+            }
+        }
+      });
+
+    }
+</script>
+</html>

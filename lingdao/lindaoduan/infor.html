@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>任务记录</title>
+	<link rel="stylesheet" type="text/css" href="../css/normalize.css" />
+	<link rel="stylesheet" type="text/css" href="../css/infor.css" />
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+	<script src="http://code.highcharts.com/modules/data.js"></script>
+	<link rel="stylesheet" href="../js/src/css/LCalendar.css">
+	<script src="../js/src/js/LCalendar.js"></script>
+	<script type="text/javascript" src="../js/fetchData.js"></script>
+
+</head>
+	<body>
+		<header>
+			<div class="iconfont icon-zuobian"></div>
+			<p>信息统计</p>
+		</header>
+		<div id="title">
+			<div class="cell flexRow" onclick="fn()">
+				<h2>统计节点</h2>
+				<h3>杭州市</h3>
+				<i class="iconfont icon-you"></i>
+			</div>
+			<div id="" class="cell flexRow">
+				<div id="" class="flexRow">
+					<i class="iconfont icon-rili"></i>
+					<input class="date" id="date" type="text" readonly="" placeholder="日期选择" data-lcalendar="2016-05-11,2016-05-11">
+				</div>
+				<div id="" class="flexRow">
+					<i class="iconfont icon-rili"></i>
+					<input class="date" id="date_1" type="text" readonly="" placeholder="日期选择" data-lcalendar="2016-05-11,2016-05-11">
+				</div>
+			</div>
+		</div>
+		<div id="" class="line">
+		</div>
+		<div class="name flexRow">
+			<p>任务执行统计</p>
+			<a href="renwu_zhixingtongji.html">查看数据列表</a>
+		</div>
+		<div id="container">
+		</div>
+		<div id="" class="line">
+			
+		</div>
+		<div class="name flexRow">
+			<p>异常处理统计</p>
+			<a href="renwu_zhixingtongji.html">查看数据列表</a>
+		</div>
+		<div id="container2">
+
+		</div>
+		<script language="JavaScript">
+			$(document).ready(function() {
+
+
+
+			});
+		</script>
+		<table id="datatable">
+			<thead>
+				<tr>
+					<th>待执行</th>
+					<th>执行中</th>
+					<th>已完成</th>
+					<th>已超时</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>西湖区</th>
+					<td>200</td>
+					<td>230</td>
+					<td>150</td>
+					<td>90</td>
+				</tr>
+				<tr>
+					<th>贡嘎区</th>
+					<td>45</td>
+					<td>89</td>
+					<td>120</td>
+					<td>290</td>
+				</tr>
+				<tr>
+					<th>吓成区</th>
+					<td>60</td>
+					<td>32</td>
+					<td>232</td>
+					<td>190</td>
+				</tr>
+				<tr>
+					<th>江干区</th>
+					<td>45</td>
+					<td>230</td>
+					<td>130</td>
+					<td>130</td>
+				</tr>
+				<tr>
+					<th>余杭区</th>
+					<td>234</td>
+					<td>124</td>
+					<td>154</td>
+					<td>194</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</body>
+
+<script>
+	function fn() {
+		window.location.href="address.html";
+    }
+    function column(xData,tasksSeries) { // 柱状图
+      var data = {
+        table: 'datatable'
+      };
+      var chart = {
+        type: 'column'
+      };
+      console.log('xData',xData);
+      console.log('tasksSeries',tasksSeries)
+      var xAxis = {
+        categories:xData
+	  };
+      var  series = tasksSeries.map((item)=>{
+        return {
+          name:item.name,
+		  data:item.data
+		}
+	  });
+      var title = {
+        text: ''
+      };
+      var yAxis = {
+        allowDecimals: false,
+        title: {
+          text: ''
+        }
+      };
+      var tooltip = {
+        formatter: function() {
+          return '<b>' + this.series.name + '</b><br/>' +
+            this.point.y + ' ' + this.point.category.toLowerCase();
+        }
+      };
+      var credits = {
+        enabled: false
+      };
+      var legend = {
+        verticalAlign: 'top', //垂直方向位置
+      };
+      var json = {};
+      json.chart = chart;
+      json.title = title;
+    /*  json.data = data;
+      json.yAxis = yAxis;*/
+      json.series = series;
+      json.xAxis = xAxis;
+      json.credits = credits;
+      json.tooltip = tooltip;
+      json.legend = legend;
+      $('#container').highcharts(json);
+
+    }
+    function bar(data) {
+	  var seriseData = data.map((item)=>{
+	    return [item.name,item.value]
+	  });
+      //				饼状图
+      var chart2 = {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false
+      };
+      var title2 = {
+        text: '待处理数据统计'
+      };
+      var tooltip2 = {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+      };
+      var plotOptions2 = {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            format: '<b>{point.name}%</b>: {point.percentage:.1f} %',
+            style: {
+              color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+            }
+          }
+        }
+      };
+      var series2 = [{
+        type: 'pie',
+        name: 'Browser share',
+        data: seriseData
+      }];
+
+      var json2 = {};
+      json2.chart = chart2;
+      json2.title = title2;
+      json2.tooltip = tooltip2;
+      json2.series = series2;
+      json2.plotOptions = plotOptions2;
+      $('#container2').highcharts(json2);
+    } // 饼状图
+	function getData() {
+      $.ajax({
+        url: baseUrl + '/app/stat/statTask',
+        type:'POST',
+        dataType: 'json',
+        data:{
+          startTime:'2018-01-20',
+          endTime:'2018-08-20',
+          regionId:12718
+		},
+        success : function(data) {
+          if (data.code === 200) {
+            bar(data.pendingData);
+            column(data.xData,data.tasksSeries)
+          }
+        }
+      });
+    }
+    var calendar = new LCalendar();
+    calendar.init({
+        'trigger': '#date', //标签id
+        'type': 'date', //date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择,
+        'minDate': '1900-1-1', //最小日期
+        'maxDate': new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() //最大日期
+    });
+    var calendar = new LCalendar();
+    calendar.init({
+        'trigger': '#date_1', //标签id
+        'type': 'date', //date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择,
+        'minDate': '1900-1-1', //最小日期
+        'maxDate': new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() //最大日期
+    });
+    $(function () {
+      getData();
+    })
+
+</script>
+</html>

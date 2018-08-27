@@ -1,0 +1,13 @@
+p{
+    padding: 15px 3%;
+    border-bottom: 1px solid #eee;
+}
+p:nth-child(2){
+    padding-left: 10%;
+}
+p span:last-child{
+    float: right;
+}
+p:nth-child(3){
+    padding-left:20%;
+}

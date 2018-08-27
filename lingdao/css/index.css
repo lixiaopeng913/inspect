@@ -1,0 +1,47 @@
+div.head{
+    width: 100%;
+    background-image: url("../imgs/bg.png");
+    background-size: 100% 100%;
+    text-align: center;
+    padding-top: 10%;
+    padding-bottom: 7%;
+}
+div.head div.toux{
+    width: 25%;
+    text-align: center;
+    margin: 0 37.5% 0 37.5%;
+}
+div.head div.toux img{
+    width:100%;
+}
+div.head div.title{
+    margin-top: 2%;
+}
+div.head div h5{
+    color: #fff;
+}
+
+/*********图标部分**********/
+div.list{
+    width: 100%;
+    background-color: #fff;
+    padding: 20px 3% 20px 3%;
+}
+div.list ul li{
+    width: 33%;
+    float: left;
+    padding:0 5% 15px 5%;
+    /*border: 1px solid red;*/
+    text-align: center;
+}
+div.list ul li a img{
+    width: 75%;
+}
+div.list ul li a p{
+    font-size: 0.8em;
+    color: black;
+}
+
+div.foot{
+    border-top: 1px solid #eee;
+}

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<title>物品二维码绑定</title>
+	</head>
+	<link rel="stylesheet" href="../css/base.css">
+	<link rel="stylesheet" href="../css/bootstrap.css">
+	<link rel="stylesheet" href="../css/index_css/bangd.css">
+	<link rel="stylesheet" href="../css/weui.min.css">
+
+	<body>
+		<div id="app">
+			<ul>
+				<li>
+					<p>
+						识别码
+						<span class="first-child">{{qrCode}}</span>
+					</p>
+				</li>
+				<li>
+					<label for="">
+            物品名称
+        </label>
+					<input v-model="materialName" type="text" placeholder="请输入物品名称">
+				</li>
+				<li>
+					<label for="">
+            物品类型
+        </label>
+					<input readonly="readonly" v-model="materialTypeValue" @click="getMaterialTypeList" type="text" placeholder="请选择">
+					<img src="../imgs/index_img/right.png" alt="">
+				</li>
+				<li @click="selectStartData">
+					<label for="">
+            生产日期
+        </label>
+					<input readonly="readonly" v-model="producedDate" type="text" placeholder="请选择">
+					<img src="../imgs/index_img/right.png" alt="">
+				</li>
+				<li @click="selectEndData">
+					<label for="">
+            过期日期
+        </label>
+					<input readonly="readonly" v-model="expireDate" type="text" placeholder="请选择">
+					<img src="../imgs/index_img/right.png" alt="">
+				</li>
+				<li @click="getCheckSpecificList">
+					<label for="">
+            检查规范
+        </label>
+					<input readonly="readonly" v-model="checkSpecificValue" type="text" placeholder="请选择">
+					<img src="../imgs/index_img/right.png" alt="">
+				</li>
+				<li @click="getRegionList">
+					<p>
+						所属区域
+						<input readonly="readonly" v-model="regionValue" type="text" placeholder="请选择">
+						<img src="../imgs/index_img/right.png" alt="">
+					</p>
+				</li>
+				<li @click="getEnterpriseByRegionId">
+					<p>
+						所属企业
+						<input v-model="enterpriseValue" readonly="readonly" type="text" placeholder="请选择（选填）">
+						<img src="../imgs/index_img/right.png" alt="">
+					</p>
+				</li>
+				<li>
+					<label for="">
+            所在位置
+        </label>
+					<input v-model="location" type="text" placeholder="请输入所在位置">
+				</li>
+			</ul>
+			<div class="box">
+				<p>
+					现场照片
+					<span>（最多9张）</span>
+				</p>
+				<div class="tianjia" id="uploader"> 
+					<div style="position: relative"></div>
+					 <img  src="../imgs/index_img/jiah.png" alt="">
+					 <div class="weui-cells weui-cells_form" id="uploader" style="position: absolute;left: 0;top: 0;opacity: 0;">
+					     <div class="weui-cell">
+					         <div class="weui-cell__bd">
+					             <div class="weui-uploader">
+					                 <!--<div class="weui-uploader__hd">
+					                     <p class="weui-uploader__title">图片上传</p>
+					                     <div class="weui-uploader__info"><span id="uploadCount">0</span>/5</div>
+					                 </div>-->
+					                 <div class="weui-uploader__bd">
+					                     <ul class="weui-uploader__files" id="uploaderFiles"></ul>
+					                     <div class="weui-uploader__input-box">
+					                         <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" capture="camera" multiple="" />
+					                     </div>
+					                 </div>
+					             </div>
+					         </div>
+					     </div>
+					 </div>
+				</div>
+			</div>
+			<div class="box_1">
+				<p>
+					备注
+					<span>(选填)</span>
+				</p>
+				<textarea v-model="remark" name="备注" id="" cols="10" rows="5" placeholder="请输入备注内容..."></textarea>
+			</div>
+			<button @click="bindDevice()">绑定</button>
+		</div>
+	</body>
+	<script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<script type="text/javascript" src="../js/axios.min.js"></script>
+	<script type="text/javascript" src="../js/fetchData.js"></script>
+	<script type="text/javascript" src="../js/common.js"></script>
+	<script src="../js/weui.min.js"></script>
+	<script>
+
+		function fun() {
+			//      window.location.href="index.html"
+		}
+
+		var myvue = new Vue({
+			el: '#app',
+			data: {
+				qrCode: getQueryString("params"),
+				materialName: "",
+				materialTypeId: "",
+				materialTypeValue:'',
+				producedDate: "",
+				expireDate: "",
+				checkSpecificId: "",
+				checkSpecificValue: "",
+				regionId: "",
+				regionValue: "",
+				enterpriseId: "",
+				enterpriseValue: "",
+				location :"",
+				materialUrl: "",
+				remark: "",
+				isCacheData: false
+			},
+			mounted:function() {
+				if(localStorage.getItem("bindDeviceInfo")) {
+					var that = this,
+					    bindDeviceInfo = JSON.parse(localStorage.getItem("bindDeviceInfo"));
+					console.log(localStorage.getItem("bindDeviceInfo"));
+					that.materialName = bindDeviceInfo.materialName;
+					that.materialTypeId = bindDeviceInfo.materialTypeId;
+					that.materialTypeValue = bindDeviceInfo.materialTypeValue;
+					that.producedDate = bindDeviceInfo.producedDate;
+					that.expireDate = bindDeviceInfo.expireDate;
+					that.checkSpecificId = bindDeviceInfo.checkSpecificId;
+					that.checkSpecificValue = bindDeviceInfo.checkSpecificValue;
+					that.regionId = bindDeviceInfo.regionId;
+					that.regionValue = bindDeviceInfo.regionValue;
+					that.enterpriseId = bindDeviceInfo.enterpriseId;
+					that.enterpriseValue = bindDeviceInfo.enterpriseValue;
+					that.location = bindDeviceInfo.location;
+					that.materialUrl = bindDeviceInfo.materialUrl;
+					that.remark = bindDeviceInfo.remark;
+				} else {
+					console.log(999)
+				}
+			},
+			methods: {
+				bindDevice: function() {
+					let that = this
+					let data = {
+						data: {
+							qrCode: getQueryString("params"),
+							materialName: that.materialName,
+							materialTypeId: that.materialTypeId,
+							producedDate: that.producedDate,
+							expireDate: that.expireDate,
+							checkSpecificId: that.checkSpecificId,
+							regionId: that.regionId,
+							enterpriseId: that.enterpriseId,
+							location :that.location,
+							materialUrl: that.materialUrl,
+							remark: that.remark
+						},
+						url: '/app/material/bind'
+					}
+
+					fetchData(data).then(res => {
+						console.log(res);
+					});
+				},
+				getMaterialTypeList: function() {
+					let that = this
+					let data = {
+						data: {
+							
+						},
+						url: '/app/material/type/list',
+						method: 'get'
+					}
+
+					fetchData(data).then(res => {
+						console.log(res);
+						var that = this
+						var weData = res.data.list.map(o=>{return{value:o.id, label:o.name}});
+						weui.picker(
+						res.data.list.map(o=>{return{value:o.id, label:o.name}}),{
+						   className: 'custom-classname',
+						   container: 'body',
+						   onChange: function (result) {
+						   	
+						   },
+						   onConfirm: function (result) {
+						   	   that.materialTypeValue = result[0].label;
+						   	   that.materialTypeId = result[0].value;
+						   	   that.checkSpecificId = "";
+						       that.checkSpecificValue = "";
+						   },
+						   id: 'materialTypeValue'
+						});
+					});
+				},
+				selectStartData:function() {
+					var that = this
+					weui.datePicker({
+					     start: new Date(), // 从今天开始
+					     end: 2030,
+					     onChange: function(result){
+					     	
+					     },
+					     onConfirm: function(result){
+					         console.log(result);
+					         that.producedDate = result[0]+'-'+result[1]+'-'+result[2];
+					     },
+					     id: 'datePicker'
+					});
+				},
+				selectEndData:function() {
+					var that = this
+					weui.datePicker({
+					     start: new Date(), // 从今天开始
+					     end: 2030,
+					     onChange: function(result){
+					     	
+					     },
+					     onConfirm: function(result){
+					         console.log(result);
+					         that.expireDate = result[0]+'-'+result[1]+'-'+result[2];
+					     },
+					     id: 'datePicker'
+					});
+				},
+				getCheckSpecificList:function() {
+					var that = this
+					if(!that.materialTypeId) {
+						weui.toast('请先选择物品类型', 1500);    
+						return false;
+					}
+					var bindDeviceInfo = {
+						qrCode: getQueryString("params"),
+						materialName: that.materialName,
+						materialTypeId: that.materialTypeId,
+						materialTypeValue: that.materialTypeValue,
+						producedDate: that.producedDate,
+						expireDate: that.expireDate,
+						checkSpecificId: that.checkSpecificId,
+						checkSpecificValue: that.checkSpecificValue,
+						regionId: that.regionId,
+						regionValue: that.regionValue,
+						enterpriseId: that.enterpriseId,
+						enterpriseValue: that.enterpriseValue,
+						location:that.location,
+						materialUrl: that.materialUrl,
+						remark: that.remark
+					}
+					
+					localStorage.setItem("bindDeviceInfo", JSON.stringify(bindDeviceInfo));
+					
+					window.location.href = "xuanze_jcgf.html?materialTypeId=" + that.materialTypeId;
+				},
+				getRegionList:function() {
+					let that = this
+					let data = {
+						data: {
+							
+						},
+						url: '/app/wx/region/list',
+						method: 'get'
+					}
+
+					fetchData(data).then(res => {
+						var cityList = res.data.list;
+						console.log(cityList);
+					    weui.picker(
+					    cityList[0].children, {
+						   className: 'custom-classname',
+						   container: 'body',
+						   defaultValue: [1, 3],
+						   onChange: function (result) {
+						       console.log(result)
+						   },
+						   onConfirm: function (result) {
+						       console.log(result)
+						       console.log(result.length)
+						       that.regionId = result[result.length-1].value;
+						       that.regionValue = result[0].label + '-' + result[1].label + '-' + result[2].label + '-' + result[3].label;
+						       that.enterpriseId = "";
+					           that.enterpriseValue = "";
+						   },
+						   id: 'doubleLinePicker'
+						});
+					});
+				},
+				getEnterpriseByRegionId: function() {
+					let that = this
+					
+					if(!that.regionId) {
+						weui.toast('请先选择所属区域', 1500);    
+						return false;
+					}
+					
+					let data = {
+						data: {
+							
+						},
+						url: '/app/enterprise/list?regionId=' + that.regionId,
+						method: 'get'
+					}
+
+					fetchData(data).then(res => {
+						console.log(res);
+						if(res.data.list.length <= 0) {
+							weui.toast('当前地区没有相关企业', 1500);    
+						    return false;
+						}
+						var weData = res.data.list.map(o=>{return{value:o.id, label:o.name}});
+						weui.picker(
+						res.data.list.map(o=>{return{value:o.id, label:o.name}}),{
+						   className: 'custom-classname',
+						   container: 'body',
+						   onChange: function (result) {
+						   	
+						   },
+						   onConfirm: function (result) {
+						   	that.enterpriseId = result[0].value;
+						   	that.enterpriseValue= result[0].label;
+						   },
+						   id: 'enterpriseId'
+						});
+					});
+				},
+				uploadImg:function() {
+					$.ajax({
+				        url: "http://47.92.7.119:8080/sys/oss/upload",
+				        type: 'POST',
+				        cache: false,
+				        data: new FormData($('#infoLogoForm')[0]),
+				        processData: false,
+				        contentType: false,
+				        dataType:"json",
+				        beforeSend: function(){
+				            uploading = true;
+				        },
+				        success : function(data) {
+				            if (data.code == 1) {
+				                $("#logo").attr("src", data.msg);
+				            } else {
+				                showError(data.msg);
+				            }
+				            uploading = false;
+				        }
+				    });
+					
+				}
+			}
+		});
+		var uploadCount = 0;
+		weui.uploader('#uploader', {
+					   url: 'http://47.92.7.119:8080/sys/oss/upload',
+					   auto: true,
+					   type: 'file',
+					   fileVal: 'file',
+					   compress: {
+					       width: 1600,
+					       height: 1600,
+					       quality: .8
+					   },
+					   onBeforeQueued: function(files) {
+					       // `this` 是轮询到的文件, `files` 是所有文件
+					
+					       if(["image/jpg", "image/jpeg", "image/png", "image/gif"].indexOf(this.type) < 0){
+					           weui.alert('请上传图片');
+					           return false; // 阻止文件添加
+					       }
+					       if(this.size > 10 * 1024 * 1024){
+					           weui.alert('请上传不超过10M的图片');
+					           return false;
+					       }
+					       if (files.length > 5) { // 防止一下子选择过多文件
+					           weui.alert('最多只能上传5张图片，请重新选择');
+					           return false;
+					       }
+					       if (uploadCount + 1 > 5) {
+					           weui.alert('最多只能上传5张图片');
+					           return false;
+					       }
+					
+					       ++uploadCount;
+					
+					       // return true; // 阻止默认行为，不插入预览图的框架
+					   },
+					   onQueued: function(){
+					       console.log(this);
+					
+					       // console.log(this.status); // 文件的状态：'ready', 'progress', 'success', 'fail'
+					       // console.log(this.base64); // 如果是base64上传，file.base64可以获得文件的base64
+					
+					       // this.upload(); // 如果是手动上传，这里可以通过调用upload来实现；也可以用它来实现重传。
+					       // this.stop(); // 中断上传
+					
+					       // return true; // 阻止默认行为，不显示预览图的图像
+					   },
+					   onBeforeSend: function(data, headers){
+					       console.log(this, data, headers);
+					       // $.extend(data, { test: 1 }); // 可以扩展此对象来控制上传参数
+					       // $.extend(headers, { Origin: 'http://127.0.0.1' }); // 可以扩展此对象来控制上传头部
+					
+					       // return false; // 阻止文件上传
+					   },
+					   onProgress: function(procent){
+					       console.log(this, procent);
+					       // return true; // 阻止默认行为，不使用默认的进度显示
+					   },
+					   onSuccess: function (ret) {
+					       console.log(this, ret);
+					       // return true; // 阻止默认行为，不使用默认的成功态
+					   },
+					   onError: function(err){
+					       console.log(this, err);
+					       // return true; // 阻止默认行为，不使用默认的失败态
+					   }
+					});
+	</script>
+
+</html>

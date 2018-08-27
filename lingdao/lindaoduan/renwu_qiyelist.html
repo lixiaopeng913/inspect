@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>任务详情</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/renwu_list.css">
+<body>
+
+<div id="app">  
+    <div class="detail">
+        <p class="first">
+            {{params.name}}
+            <span>截止时间：{{params.startTime|cutTime}}</span>
+        </p>
+        <p>
+            任务时间：
+            <span>{{params.endTime|cutTime}}</span>
+        </p>
+        <p>
+            完成进度：
+            <span>{{params.progressRate}}</span>
+        </p>
+        <p>
+            任务地点：
+            <span>{{params.location}}</span>
+        </p>
+        <p>
+            检查人：
+            <span>{{params.checkUser}}</span>
+        </p>
+    </div>
+    <div class="rwz">
+
+        <p class="first list clearfix" id="last">
+            <span :class="highligh==1?'span_1':''" @click='showList(1)'>检查物品种类</span>
+            <span :class="highligh==2?'span_1':''" @click='showList(2)'>检查企业列表</span>
+        </p>
+
+        <div v-for='list in lists'>
+            <p class="first" onclick="fun()" @click="link(list.id)">
+                {{list.materialType }}({{list.finish }}/{{list.total}})
+                <img src="../imgs/right.png" alt="">
+            </p>
+            <ul>
+                <li>
+                    <p>
+                        <img src="../imgs/xyd_1.png" alt="">
+                        总量
+                        <span>{{list.total}}</span>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <img src="../imgs/xyd_2.png" alt="">
+                        正常
+                        <span>{{list.finish}}</span>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <img src="../imgs/xyd_2.png" alt="">
+                        异常
+                        <span>{{list.anomaly}}</span>
+                    </p>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+</body>
+<script>
+    function fn() {
+        window.location.href="renwu_wplist.html"
+    }
+    function fun() {
+        window.location.href="wupin_list.html"
+    }
+</script>
+
+
+<script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../js/vue.min.js"></script>
+<script type="text/javascript" src="../js/axios.min.js"></script>
+<script type="text/javascript" src="../js/fetchData.js"></script>
+
+<script>
+    var myvue = new Vue({
+        el: '#app',
+        data: {
+            nodata: false,
+            tagChaoshi: false,
+            highligh: 1,
+            params: {},
+            lists: [],
+            urlDetailType: 'material'
+        },
+        filters: {
+            cutTime(value){
+                if(value){ 
+                    return value.match(/^.+\s/)[0];
+                }
+            }
+        },
+        created(){
+            var params = window.location.href.match(/\params=.+/)[0].replace('params=','');
+            params = decodeURIComponent(params);
+            params = JSON.parse(decodeURIComponent(params));
+            console.log(params);
+            this.params = params;
+
+            if(params.status==3){
+                this.tagChaoshi = true;
+            }
+
+            let data = {
+                data:{
+                    taskId: params.taskId,
+                    taskGroupId: params.taskGroupId
+                },
+                url:'/app/task/statistics/material'
+            }
+            this.getList(data);
+        },
+        methods:{
+            getList(params){
+             fetchData (params).then(res => {
+                console.log(res);
+                if (res.data.code == 200) {
+                    this.lists = res.data.page.list;  
+                    if(res.data.page.list.length<1){
+                        this.nodata = true;
+                    }else{
+                        this.nodata = false;
+                    }
+                }else {
+
+                }
+              });
+            },
+            showList(index){
+                this.highligh = index;
+                let url = index==1?'/app/task/statistics/material':'/app/task/statistics/region'
+                let data = {
+                    data:{
+                        taskId: this.params.taskId,
+                        taskGroupId: this.params.taskGroupId
+                    },
+                    url:url
+                }
+                this.getList(data);
+                if(index==1){
+                    this.urlDetailType = 'material';
+                }else{
+                    this.urlDetailType = 'region';
+                }
+            },
+            link(id){
+                console.log(id);
+                let params = {};
+                params.id = id;
+                params.taskId = this.params.taskId;
+                params.taskGroupId = this.params.taskGroupId;
+                params.urlDetailType = this.urlDetailType;
+                window.location.href="wupin_list.html?params="+ JSON.stringify(params)
+            }
+        }
+    });
+</script>
+
+</html>

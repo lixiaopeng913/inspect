@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>检查情况-异常</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/task_css/jcqk.css">
+<body>
+<div id="app">
+    <div class="title">
+        <p>
+            识别码：{{res.qrCode}}
+            <span @click='linkHistory'>
+                历史检查
+                <img src="../imgs/task_img/right.png" alt="">
+            </span>
+        </p>
+    </div>
+    <div class="mhq clearfix">
+        <div class="box">
+            <!-- <img :src="res.materialUrl?res.materialUrl:'../imgs/task_img/mhq.png'" alt=""> -->
+            <img :src='res.materialUrl' alt="">
+        </div>
+        <div class="box_1">
+            <p>
+                {{res.materialName}}
+                <a :href="'jcgf.html?materialTypeId='+params.materialTypeId">
+                    <span>检查规范</span>
+                </a>
+            </p>
+            <p>位置：{{res.location}}</p>
+            <p>生产日期：{{res.producedDate|cutTime}}</p>
+            <p>过期日期：{{res.expireDate|cutTime}}</p>
+        </div>
+    </div>
+    <div class="jcjg">
+        <p>
+            检查时间：
+            <span>{{res.checkDate}}</span>
+        </p>
+        <p>
+            检查人：
+            <span>{{res.checkUser}}</span>
+        </p>
+        <p>
+            检查结果：
+            <span :class='{yic:status==2, zenc:status==1}'>{{res.checkResult}}</span>
+        </p>
+        <p>
+            上报上级：
+            <span>{{res.superiors}}</span>
+        </p>
+        <p>
+            检查描述：
+            <span>{{res.remark}}</span>
+        </p>
+    </div>
+    <div class="yuanyin" v-if='status==2'>
+        <p>
+            异常原因
+        </p>
+        <p v-for='reasons in anomalyReasons'>
+            <span>异常</span>
+            {{reasons}}
+        </p>
+<!--         <p>
+            <span>异常</span>
+            灭火器是否达到报废条件和报废期限
+        </p> -->
+    </div>
+    <div class="xianc clearfix">
+        <p>现场照片</p>
+        <ul>
+            <li v-for='photo in xianchangPhoto'>
+                <img :src="photo" alt="">
+            </li>
+<!--             <li>
+                <img src="../imgs/task_img/xc_2.png" alt="">
+            </li> -->
+        </ul>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../js/vue.min.js"></script>
+<script type="text/javascript" src="../js/axios.min.js"></script>
+<script type="text/javascript" src="../js/fetchData.js"></script>
+
+<script>
+    var myvue = new Vue({
+        el: '#app',
+        data: {
+            nodata: false,
+            res: [],
+            params: {},
+            xianchangPhoto: [],
+            anomalyReasons: [],
+            status: ''
+        },
+        filters: {
+            cutTime(value){
+                if(value){
+                    return value.match(/^.+\s/)[0];  
+                }
+            }
+        },
+        created(){
+            var params = window.location.href.match(/\params=.+/)[0].replace('params=','');
+            params = decodeURIComponent(params);
+            params = JSON.parse(decodeURIComponent(params));
+            console.log(params);
+            this.params = params;
+            this.status = params.status;
+
+            var url = '/app/material/details';
+            let data = {
+                data:{
+                    id: params.id,
+                },
+                url: url
+            }
+             fetchData (data).then(res => {
+                console.log(res);
+                console.log(res.data.list);
+                if (res.data.code == 200) {
+                    this.res = res.data.list;  
+                    this.xianchangPhoto = res.data.list.urls.split(',');
+                    this.anomalyReasons = res.data.list.anomalyReasons.split(',');
+                    if(res.data.list.length<1){
+                        this.nodata = true;
+                    }else{
+                        this.nodata = false;
+                    }
+                }else {
+
+                }
+              });
+        },
+        methods:{
+            linkHistory(){
+                var url = "jcjl.html?materialId="+ this.params.materialTypeId;
+                window.location.href = url;
+            }
+        }
+    });
+</script>
+</html>

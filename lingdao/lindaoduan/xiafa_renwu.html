@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>下发任务</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/xiafa_renwu.css">
+<link rel="stylesheet" href="../js/src/css/LCalendar.css">
+<script src="../js/src/js/LCalendar.js"></script>
+<body>
+<ul>
+    <li>
+        <p>任务组</p>
+        <a href="">请选择</a>
+    </li>
+    <li>
+        <p>人员</p>
+        <a href="">请选择</a>
+    </li>
+    <li>
+        <p>开始时间</p>
+        <img src="../imgs/date.png" alt="">
+        <!--<span>请选择年月日</span>-->
+        <input type="text" id="test" placeholder="请选择年月日">
+    </li>
+    <li><p>截至时间</p>
+        <img src="../imgs/date.png" alt="">
+        <!--<span class="test1">请选择年月日</span>-->
+        <input type="text" id="test_1" placeholder="请选择年月日">
+    </li>
+</ul>
+<button class="btn" type="submit" id="xxx" onclick="fn()">提交</button>
+
+</body>
+<!--<script src="../js/laydate/laydate.js"></script>-->
+<script src="../js/layer_mobile/layer.js"></script>
+<script src="../js/jquery-1.11.1.min.js"></script>
+<script>
+    // laydate.render({
+    //     elem: '#test',
+    // });
+    // laydate.render({
+    //     elem: '#test_1',
+    // });
+    //
+    // $('#xxx').click(function () {
+    //     layer.open({
+    //         content: '创建任务成功'
+    //         ,time: 2
+    //     });
+    // })
+function fn() {
+    window.location.href="renwu.html"
+}
+
+
+    var calendar = new LCalendar();
+    calendar.init({
+        'trigger': '#test', //标签id
+        'type': 'date', //date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择,
+        'minDate': '1900-1-1', //最小日期
+        'maxDate': new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() //最大日期
+    });
+    var calendar = new LCalendar();
+    calendar.init({
+        'trigger': '#test_1', //标签id
+        'type': 'date', //date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择,
+        'minDate': '1900-1-1', //最小日期
+        'maxDate': new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() //最大日期
+    });
+</script>
+</html>

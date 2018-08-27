@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>检查记录</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/jcjl.css">
+<body>
+<div id="app">
+    <ul>
+        <li v-for="list in res">
+            <p>
+                {{list.materialName}}
+                <span>{{list.checkResult}}</span>
+            </p>
+            <p>
+                {{list.checkTime}}
+                <span>{{list.checkUserName}}</span>
+            </p>
+        </li>
+    <!--         
+        <li>
+            <p>
+                灭火器
+                <span>异常</span>
+            </p>
+            <p>
+                2018-01-20  11:45:21
+                <span>张三</span>
+            </p>
+        </li>
+        <li>
+            <p>
+                灭火器
+                <span  class="zenc">异常</span>
+            </p>
+            <p>
+                2018-01-20  11:45:21
+                <span>张三</span>
+            </p>
+        </li> 
+    -->
+    </ul>
+</div>
+</body>
+
+<script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../js/vue.min.js"></script>
+<script type="text/javascript" src="../js/axios.min.js"></script>
+<script type="text/javascript" src="../js/fetchData.js"></script>
+<script>
+    var myvue = new Vue({
+        el: '#app',
+        data: {
+            nodata: false,
+            res: [],
+        },
+        filters: {
+            cutTime(value){
+                return value.match(/^.+\s/)[0];
+            }
+        },
+        created(){ 
+            var materialId = window.location.href.match(/materialId=\d+/)[0].replace('materialId=','');
+            console.log(materialId);
+            var params = {
+                data:{
+                    id: materialId
+                },
+                url:'/app/material/history'
+            };
+             fetchData (params).then(res => {
+                console.log(res);
+                if (res.data.code == 200) {
+                    this.res = res.data.page.list;
+                    if(res.data.page.list.length>0){
+                        this.nodata = false;
+                    }else{
+                        this.nodata = true;
+                    }
+                }
+            })
+        },
+        methods: {
+        }
+    });
+</script>
+</html>

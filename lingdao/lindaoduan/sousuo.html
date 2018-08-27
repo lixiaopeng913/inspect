@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <script src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/vue.min.js"></script>
+    <script type="text/javascript" src="../js/axios.min.js"></script>
+    <script type="text/javascript" src="../js/fetchData.js"></script>
+    <title>搜索</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/sousuo.css">
+<body>
+<div >
+    <div id="app">
+        <div class="box clearfix">
+            <img src="../imgs/sjx.png" alt="">
+            <select name="" id="" v-model="type">
+                <option value="1">任务</option>
+                <option value="2">企业</option>
+                <option value="3">通讯录</option>
+            </select>
+            <input type="text" placeholder="请输入关键字" v-model="text">
+            <a @click="search">搜索</a>
+        </div>
+       <!-- <ul class="container">
+            <li>
+                <p>
+                    历史搜索
+                </p>
+            </li>
+            <li>
+                <p>
+                    巡查
+                </p>
+            </li>
+            <li>
+                <p>
+                    巡查
+                </p>
+            </li>
+            <li>
+                <p>
+                    巡查
+                </p>
+            </li>
+
+        </ul>-->
+        <ul class="detail" >
+            <li v-for="(item,i) in taskList" @click="jump" v-if="taskList.length>0">
+                <p class="first">
+                    {{type != 2?item.name:item.enterpriseName}}
+                </p>
+            </li>
+        </ul>
+    </div>
+
+</div>
+</body>
+<script>
+  var myvue = new Vue({
+    el: '#app',
+    data() {
+      return {
+        taskList: [],
+        type: '1',
+        text:''
+      }
+    },
+    methods: {
+      getTaskList(status) { // 任务查询
+        let data = {
+          data: {status:status},
+          method: 'post',
+          url: '/app/task/list'
+        }
+        fetchData(data).then(res => {
+          if (res.data.code === 200) {
+            this.taskList = res.data.page.list;
+          } else {
+
+          }
+        });
+      },
+      getAdressBook (name) {// 通讯录查询
+        let data = {
+          data: {
+            name:name
+          },
+          method: 'post',
+          url: '/app/address/book/'
+        }
+        fetchData(data).then(res => {
+          if (res.data.code === 200) {
+            this.taskList = res.data.page.list;
+          } else {
+
+          }
+        });
+      },
+      getCompany (name) { // 公司查询
+        let data = {
+          data: {
+            enterpriseName:name
+          },
+          method: 'post',
+          url: '/app/enterprise/search'
+        }
+        fetchData(data).then(res => {
+          if (res.data.code === 200) {
+            this.taskList = res.data.page.list;
+          } else {
+
+          }
+        });
+      },
+      jump () { // 调转
+        if (this.type == 1) { // 跳转让任务列表
+          window.location.href = "renwu.html?name="+this.text;
+        }
+        else if (this.type == 2) { // 跳转企业
+          // this.getCompany(this.text);
+        }
+        else if (this.type == 3) { // 跳转通讯录
+          window.location.href = "tongxunlu.html?name="+this.text;
+          //this.getAdressBook(this.text)
+        }
+      },
+      search () { // 查询
+        if (this.type == 1) {
+            this.getTaskList(this.text)
+        }
+        else if (this.type == 2) {
+            this.getCompany(this.text);
+        }
+        else if (this.type == 3) {
+          this.getAdressBook(this.text)
+        }
+      },
+      init() {
+       /* this.getTaskList();*/
+      }
+    },
+    created() {
+      this.init();
+    }
+  });
+</script>
+</html>

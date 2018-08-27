@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>法律法规详情</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/zhishi/falu_detail.css">
+<script type="text/javascript" src="../js/jquery-1.11.1.min.js"></script>
+<body>
+<div>
+    <img src="../imgs/zhishi_img/datu.png" alt="">
+    <p id="content">
+
+    </p>
+    <a href="02_kaosi.html">进入考试</a>
+</div>
+</body>
+<script>
+    $(function () {
+      var content = sessionStorage.getItem('content');
+      // var id = sessionStorage.getItem('id');
+      $("#content").html(content)
+    })
+</script>
+</html>

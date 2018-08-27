@@ -1,0 +1,25 @@
+ul li{
+    padding: 5px 3%;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+}
+ul li p,ul li p:last-child span{
+    margin: 10px 0;
+    color:#333;
+}
+ul li p span{
+    float: right;
+    font-size: 0.9em;
+}
+ul li p:first-child span{
+    color: red;
+}
+ul li p:last-child{
+    color: #b9bbbe;
+}
+ul li p:last-child span{
+    margin: 0;
+}
+ul li p:first-child span.zenc{
+    color: green;
+}

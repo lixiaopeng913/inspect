@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>个人中心</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/user.css">
+<script src="../js/jquery.min.js"></script>
+<body>
+<ul>
+    <li>
+        <p>
+            姓名
+            <span id="name">
+                小芒果Vicky
+            </span>
+        </p>
+    </li>
+    <li>
+        <p>
+            电话
+            <span id="phone">
+                18888888888
+            </span>
+        </p>
+    </li>
+    <li>
+        <p>
+            地址
+            <span id="address">
+                西湖区骆家庄社区
+            </span>
+        </p>
+    </li>
+</ul>
+<button type="submit" onclick="fn()">
+    退出登陆
+</button>
+</body>
+<script>
+    function fn() {
+        window.location.href="login.html"
+    }
+    $(function () {
+      $("#name").text(sessionStorage.getItem('realname'));
+      $("#phone").text(sessionStorage.getItem('mobile'));
+      $("#address").text(sessionStorage.getItem('regionName'));
+    })
+</script>
+</html>

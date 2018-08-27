@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>通讯录</title>
+		<link rel="stylesheet" type="text/css" href="../css/normalize.css" />
+		<link rel="stylesheet" type="text/css" href="../css/tongxunlu.css" />
+		<script src="../js/jquery.min.js"></script>
+		<script type="text/javascript" src="../js/vue.min.js"></script>
+		<script type="text/javascript" src="../js/axios.min.js"></script>
+		<script type="text/javascript" src="../js/fetchData.js"></script>
+	</head>
+
+	<body>
+		<div id="app">
+			<header class="fixed">
+				<div class="iconfont icon-zuobian"></div>
+				<p>部门通讯录</p>
+			</header>
+			<div id="search" class="flexRow fixed">
+
+				<i class="iconfont icon-search"></i>
+				<input type="" name="" id=""
+					   v-model="searchData" placeholder="请输入关键字" />
+				<p @click="fitter">搜索</p>
+			</div>
+			<div id="container">
+				<div id="address-list">
+					<div class="list flexRow" >
+					<!--	<h2>A</h2>-->
+						<ul>
+							<li class="flexRow" v-for="(phone,i) in phoneList" @click="pop(phone)">
+								<a>全</a>
+								<h3>{{phone.name}}</h3>
+								<p>{{phone.position}}</p>
+							</li>
+						</ul>
+					</div>
+					<!--	<div class="list flexRow">
+							<h2>B</h2>
+							<ul>
+								<li class="flexRow">
+									<a>波</a>
+									<h3>当时的</h3>
+									<p>联合秘书长</p>
+								</li>
+								<li class="flexRow">
+									<a>波</a>
+									<h3>都是</h3>
+									<p>联合秘书长</p>
+								</li>
+								<li class="flexRow">
+									<a>波</a>
+									<h3>是</h3>
+									<p>联合秘书长</p>
+								</li>
+							</ul>
+						</div>
+						<div class="list flexRow">
+							<h2>M</h2>
+							<ul>
+								<li class="flexRow">
+									<a>马</a>
+									<h3>当时的</h3>
+									<p>联合秘书长</p>
+								</li>
+								<li class="flexRow">
+									<a>马</a>
+									<h3>都是</h3>
+									<p>联合秘书长</p>
+								</li>
+								<li class="flexRow">
+									<a>马</a>
+									<h3>是</h3>
+									<p>联合秘书长</p>
+								</li>
+							</ul>
+						</div>			-->
+				</div>
+				<ul id='right-list'>
+					<li v-for="(item,i) in LetterArr">{{item}}</li>
+				</ul>
+				<div id="dail-box" v-if="isPop">
+					<div id="phone-box">
+						<h2>拨打电话</h2>
+						<p>{{selectPhone.mobile}}</p>
+						<div class="flexRow">
+							<button id='cancle' @click="cancal">取消</button>
+							<button id="confirm" @click="sure">确认</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+      var myvue = new Vue({
+        el: '#app',
+        data() {
+          return {
+            phoneList: [],
+			initPhone:[],
+            isPop:false,
+            searchData:'',
+			selectPhone:{},
+            LetterArr: ['A','B','C','D','E','F','G','H','I','J','k','l','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+          }
+        },
+        methods: {
+          getPhoneLis () {
+            let data = {
+              data: {},
+              method:'get',
+              url: '/app/address/book/'
+            }
+            fetchData(data).then(res => {
+              console.log(res);
+              if (res.data.code == 200) {
+                this.phoneList = res.data.page.list;
+                this.initPhone = res.data.page.list;
+              } else {
+
+              }
+            });
+		  },
+          fitter(){
+            console.log(22333)
+            this.phoneList = this.initPhone.filter((item)=>{
+              if (item.name.indexOf(this.searchData) === 0) {
+                return item
+			  }
+            });
+            console.log( this.phoneList)
+		  },
+          pop(phone){
+            this.selectPhone = phone;
+            this.isPop = true;
+		  },
+          cancal(){
+            console.log(232323)
+            this.isPop = false;
+		  },
+          sure(){
+            console.log(232323)
+            this.isPop = false;
+		  },
+          init() {
+            this.getPhoneLis();
+          }
+        },
+        created() {
+          this.init();
+        }
+      });
+	</script>
+</html>

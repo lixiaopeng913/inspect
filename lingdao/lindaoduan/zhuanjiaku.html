@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <title>专家库</title>
+</head>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/zhuanjiaku.css">
+<script src="../js/jquery.min.js"></script>
+<script type="text/javascript" src="../js/vue.min.js"></script>
+<script type="text/javascript" src="../js/axios.min.js"></script>
+<script type="text/javascript" src="../js/fetchData.js"></script>
+<body>
+<div id="app">
+    <div class="clearfix seach">
+        <img class="fdj" src="../imgs/fdj_1.png" alt="">
+        <input type="text" placeholder="请输入关键字" v-model="name">
+        <span @click="fitter">搜索</span>
+    </div>
+    <ul class="clearfix" >
+        <li class="clearfix" v-for="(item,i) in ExpertList">
+            <div class="box">
+                <img :src="item.avatar" alt="">
+            </div>
+            <div class="box_1">
+                <p>职称：{{item.jobTitle}} </p>
+                <p>专家：{{item.expertName}}</p>
+                <p>联系方式：{{item.mobile}}</p>
+                <p>擅长领域：{{item.skill}} </p>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+<script type="text/javascript">
+  var myvue = new Vue({
+    el: '#app',
+    data() {
+      return {
+        ExpertList: [],
+        name:''
+      }
+    },
+    methods: {
+      getExpertList (name) {
+        name = name || '';
+        let data = {
+          data: {
+            name:name
+          },
+          method:'post',
+          url: '/app/expert/list/'
+        }
+        fetchData(data).then(res => {
+          if (res.data.code === 0) {
+            this.ExpertList = res.data.page.list;
+          } else {
+
+          }
+        });
+      },
+      fitter(){
+        this.getExpertList(this.name)
+      },
+      init() {
+        this.getExpertList();
+      }
+    },
+    created() {
+      this.init();
+    }
+  });
+
+</script>
+</html>

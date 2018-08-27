@@ -1,0 +1,42 @@
+ul{
+    background-color: #fff;
+    padding: 0 3%;
+    margin: 0;
+}
+ul li{
+    border-bottom: 1px solid #eee;
+}
+ ul li div{
+     float: left;
+     padding: 15px 0
+ }
+ul li div.box{
+    width: 40%;
+}
+ul li div.box img{
+    width: 100%;
+}
+ul li div.box_1{
+    width: 60%;
+    padding-left: 8px;
+}
+ul li div.box_1 p{
+    font-size: 0.9em;
+    color: #8c8e91;
+    margin: 0;
+    padding: 6px 0;
+}
+ul li div.box_1 p:first-child{
+    color: #202326;
+    font-size: 1.1em;
+    padding: 0;
+}
+div.foot ul li:first-child a p{
+    color: #202326;
+}
+div.foot ul li:last-child a p{
+    color: orange;
+}
+
+
+

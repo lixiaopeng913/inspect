@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/vue.min.js"></script>
+    <script type="text/javascript" src="../js/axios.min.js"></script>
+    <script type="text/javascript" src="../js/fetchData.js"></script>
+</head>
+<body>
+<div id="app">
+    <div v-for="item in phoneList">sdsdsds</div>
+</div>
+
+</body>
+<script type="text/javascript">
+  var myvue = new Vue({
+    data() {
+      return {
+        ExpertList: [],
+        searchData:'',
+        phoneList:[1,3232,3]
+      }
+    },
+    methods: {
+      getExpertList () {
+        let data = {
+          data: {},
+          method:'get',
+          url: '/app/expert/list/'
+        }
+        fetchData(data).then(res => {
+          if (res.data.code === 0) {
+            this.ExpertList = res.data.page.list;
+          } else {
+
+          }
+        });
+      },
+      fitter(){
+
+      },
+      init() {
+        this.getExpertList();
+      }
+    },
+    created() {
+      this.init();
+    }
+  }).$mount('#app');
+
+</script>
+</html>
